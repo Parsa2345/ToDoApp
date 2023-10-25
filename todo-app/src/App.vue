@@ -4,18 +4,16 @@
 
     <main>
       <AddToDo @AddNewTodo="AddToDo"></AddToDo>
-      <Todo v-for=" (todo,index)  in todos" :key="todo.id" :todo="todo" 
-      @Delete="DeleteTodo" @changeStatus="changeTodostatus"
-      @dragover.prevent
-      @dragstart="dragstart(index)"
-      @drop="drop(index)"
-        ></Todo>
+      <Todo v-for=" (todo, index)  in getActiveTab" :key="todo.id" :todo="todo" @Delete="DeleteTodo"
+        @changeStatus="changeTodostatus" @dragover.prevent @dragstart="dragstart(index)" @drop="drop(index)"></Todo>
       <div class="card stat">
-        <p class="corner"><span id="items-left">{{getRamainTodo}}</span> مورد باقی مانده</p>
+        <p class="corner">
+          <span id="items-left">{{ getRamainTodo }}</span> مورد باقی مانده
+        </p>
         <div class="filter">
-          <button id="all" class="on">همه</button>
-          <button id="active">فعال</button>
-          <button id="completed">تکمیل</button>
+          <button id="all" :class="{ on: activeTab == 'all' }" @click="changeActiveTab('all')">همه</button>
+          <button id="active" :class="{ on: activeTab == 'active' }" @click="changeActiveTab('active')">فعال</button>
+          <button id="completed" :class="{ on: activeTab == 'completed' }" @click="changeActiveTab('completed')">تکمیل</button>
         </div>
         <div class="corner">
           <button @click="deleteCompleted" id="clear-completed">حذف تکمیل شده ها</button>
@@ -24,7 +22,6 @@
     </main>
     <AppFooter></AppFooter>
   </body>
- 
 </template>
 
 <script>
@@ -43,48 +40,79 @@ export default {
   },
   data() {
     return {
-      todos:[ ],
-      draging:1
+      todos: [],
+      draging: 1,
+      activeTab: "all"
     }
   },
-  computed:{
-    getRamainTodo(){
-      return this.todos.filter(i=>i.isComplete==false).length;
-    }
-  },
-  methods: { 
-    AddToDo(todoTitle){
-      const uuid=Math.random().toString(16).slice(2);
-      const newTodo={title:todoTitle,isComplete:false,id:uuid};
-       this.todos.push(newTodo);
-       console.log(todoTitle);
+  computed: {
+    getRamainTodo() {
+      return this.todos.filter(i => i.isComplete == false).length;
     },
-    DeleteTodo(todoId){
-      this.todos= this.todos.filter(t=>t.id!=todoId);
-    },
-    changeTodostatus(todoId,newStatus){
-       var newTodos=[...this.todos];
-       var item=newTodos.find(i=>i.id==todoId);
-       item.isComplete=newStatus;
-       this.todos=newTodos;
-       
-    },
-    deleteCompleted(){
-      if(confirm("تکیل ها  حذف شوند؟؟؟"))
-       {var newTodos=[...this.todos];
-         newTodos=newTodos.filter(i=>i.isComplete==false); 
-       this.todos=newTodos;}
-       
-    },
-    dragstart(i){
-      this.draging=i; 
-       
-    },
-    drop(i){
+    getActiveTab() { 
+      switch (this.activeTab) {
+        case "all":
+          {
+            return this.todos;
+          }
 
-      var newelemt=this.todos.splice(this.draging,1)[0];
-      this.todos.splice(i,0,newelemt); 
-       
+
+        case "completed":
+          {
+            return this.todos.filter(t => t.isComplete == true);
+          }
+
+        case "active":
+          { 
+           return this.todos.filter(t => t.isComplete == false); 
+          }
+
+
+        default: {
+
+        return  this.todos;
+        }
+      }
+
+    }
+  },
+  methods: {
+    AddToDo(todoTitle) {
+      const uuid = Math.random().toString(16).slice(2);
+      const newTodo = { title: todoTitle, isComplete: false, id: uuid };
+      this.todos.push(newTodo);
+      console.log(todoTitle);
+    },
+    DeleteTodo(todoId) {
+      this.todos = this.todos.filter(t => t.id != todoId);
+    },
+    changeTodostatus(todoId, newStatus) {
+      var newTodos = [...this.todos];
+      var item = newTodos.find(i => i.id == todoId);
+      item.isComplete = newStatus;
+      this.todos = newTodos;
+
+    },
+    deleteCompleted() {
+      if (confirm("تکیل ها  حذف شوند؟؟؟")) {
+        var newTodos = [...this.todos];
+        newTodos = newTodos.filter(i => i.isComplete == false);
+        this.todos = newTodos;
+      }
+
+    },
+    dragstart(i) {
+      this.draging = i;
+
+    },
+    drop(i) {
+
+      var newelemt = this.todos.splice(this.draging, 1)[0];
+      this.todos.splice(i, 0, newelemt);
+
+    },
+    changeActiveTab(tabName) {
+      this.activeTab = tabName;
     }
   },
 }
