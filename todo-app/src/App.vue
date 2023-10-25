@@ -41,7 +41,7 @@ export default {
       todos:[ ]
     }
   },
-  methods: {
+  methods: { 
     AddToDo(todoTitle){
       const uuid=Math.random().toString(16).slice(2);
       const newTodo={title:todoTitle,isComplete:false,id:uuid};
