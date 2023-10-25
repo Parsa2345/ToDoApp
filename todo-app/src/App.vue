@@ -4,7 +4,7 @@
 
     <main>
       <AddToDo @AddNewTodo="AddToDo"></AddToDo>
-      <Todo v-for="(todo,index) in todos" :key="index" :todo="todo" ></Todo>
+      <Todo v-for=" todo  in todos" :key="todo.id" :todo="todo" @Delete="DeleteTodo" @changeStatus="changeTodostatus" ></Todo>
       <div class="card stat">
         <p class="corner"><span id="items-left">0</span> مورد باقی مانده</p>
         <div class="filter">
@@ -13,7 +13,7 @@
           <button id="completed">تکمیل</button>
         </div>
         <div class="corner">
-          <button id="clear-completed">حذف تکمیل شده ها</button>
+          <button @click="deleteCompleted" id="clear-completed">حذف تکمیل شده ها</button>
         </div>
       </div>
     </main>
@@ -38,17 +38,32 @@ export default {
   },
   data() {
     return {
-      todos:[
-        {title:"دیدن آموزش vue",isComplete:false},
-        {title:"دیدن آموزش asp.net Core",isComplete:true}
-    ]
+      todos:[ ]
     }
   },
   methods: {
     AddToDo(todoTitle){
-      console.log(todoTitle);
-      const newTodo={title:todoTitle,isComplete:false};
+      const uuid=Math.random().toString(16).slice(2);
+      const newTodo={title:todoTitle,isComplete:false,id:uuid};
        this.todos.push(newTodo);
+       console.log(todoTitle);
+    },
+    DeleteTodo(todoId){
+      this.todos= this.todos.filter(t=>t.id!=todoId);
+    },
+    changeTodostatus(todoId,newStatus){
+       var newTodos=[...this.todos];
+       var item=newTodos.find(i=>i.id==todoId);
+       item.isComplete=newStatus;
+       this.todos=newTodos;
+       
+    },
+    deleteCompleted(){
+      if(confirm("تکیل ها  حذف شوند؟؟؟"))
+       {var newTodos=[...this.todos];
+         newTodos=newTodos.filter(i=>i.isComplete==false); 
+       this.todos=newTodos;}
+       
     }
   },
 }
