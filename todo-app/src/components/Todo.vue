@@ -3,10 +3,10 @@
 
         <li class="card" draggable="true">
             <div class="cb-container">
-                <input type="checkbox" class="cb-input" />
+                <input type="checkbox" :checked="todo.isComplete" class="cb-input" />
                 <span class="check"></span>
             </div>
-            <p class="item">یادگیری جاوااسکریپت</p>
+            <p class="item">{{todo.title}}</p>
             <button class="clear">
                 <img src="../assets/images/icon-cross.svg" alt="Clear it" />
             </button>
@@ -14,23 +14,15 @@
 
 
 
-        <li class="card">
-            <div class="cb-container">
-                <input type="checkbox" class="cb-input" />
-                <span class="check"></span>
-            </div>
-            <p class="item">یادگیری Nodejs</p>
-            <button class="clear">
-                <img src="../assets/images/icon-cross.svg" alt="Clear it" />
-            </button>
-        </li>
-
+ 
     </ul>
 </template>
 
 <script>
 export default {
-
+props:{
+    todo:Object
+}
 }
 </script>
 
