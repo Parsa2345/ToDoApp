@@ -1,17 +1,31 @@
 <template>
   <div class="card add">
     <div class="cb-container">
-      <button id="add-btn">+</button>
+      <button @click="AddTodo" id="add-btn">+</button>
     </div>
     <div class="txt-container">
       <label for="addt">افزودن </label>
-      <input type="text" class="txt-input" placeholder="افزودن وظیفه جدید..." spellcheck="false" autocomplete="off"
-        id="addt" dir="rtl" />
+      <input v-model="todoTitle" type="text" class="txt-input" placeholder="افزودن وظیفه جدید..." spellcheck="false" autocomplete="off"
+        id="addt" dir="rtl" @keypress.enter="AddTodo" />
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      todoTitle:""
+  }
+},
+    methods: {
+       AddTodo(){
+        console.log(this.todoTitle);
+        this.$emit("AddNewTodo",this.todoTitle);
+        this.todoTitle="";
+       }
+    }
+   
+};
 
 </script>
