@@ -4,9 +4,14 @@
 
     <main>
       <AddToDo @AddNewTodo="AddToDo"></AddToDo>
-      <Todo v-for=" todo  in todos" :key="todo.id" :todo="todo" @Delete="DeleteTodo" @changeStatus="changeTodostatus" ></Todo>
+      <Todo v-for=" (todo,index)  in todos" :key="todo.id" :todo="todo" 
+      @Delete="DeleteTodo" @changeStatus="changeTodostatus"
+      @dragover.prevent
+      @dragstart="dragstart(index)"
+      @drop="drop(index)"
+        ></Todo>
       <div class="card stat">
-        <p class="corner"><span id="items-left">0</span> مورد باقی مانده</p>
+        <p class="corner"><span id="items-left">{{getRamainTodo}}</span> مورد باقی مانده</p>
         <div class="filter">
           <button id="all" class="on">همه</button>
           <button id="active">فعال</button>
@@ -38,7 +43,13 @@ export default {
   },
   data() {
     return {
-      todos:[ ]
+      todos:[ ],
+      draging:1
+    }
+  },
+  computed:{
+    getRamainTodo(){
+      return this.todos.filter(i=>i.isComplete==false).length;
     }
   },
   methods: { 
@@ -63,6 +74,16 @@ export default {
        {var newTodos=[...this.todos];
          newTodos=newTodos.filter(i=>i.isComplete==false); 
        this.todos=newTodos;}
+       
+    },
+    dragstart(i){
+      this.draging=i; 
+       
+    },
+    drop(i){
+
+      var newelemt=this.todos.splice(this.draging,1)[0];
+      this.todos.splice(i,0,newelemt); 
        
     }
   },
