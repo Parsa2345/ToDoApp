@@ -80,11 +80,12 @@ export default {
     AddToDo(todoTitle) {
       const uuid = Math.random().toString(16).slice(2);
       const newTodo = { title: todoTitle, isComplete: false, id: uuid };
-      this.todos.push(newTodo);
-      console.log(todoTitle);
+      this.todos.push(newTodo); 
+      this.$toast.success("با موفقیت انجام شد");
     },
     DeleteTodo(todoId) {
       this.todos = this.todos.filter(t => t.id != todoId);
+      this.$toast.error(`${todoId}`+ "با موفقیت انجام شد");
     },
     changeTodostatus(todoId, newStatus) {
       var newTodos = [...this.todos];
