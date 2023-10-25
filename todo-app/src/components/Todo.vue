@@ -3,11 +3,11 @@
 
         <li class="card" draggable="true">
             <div class="cb-container">
-                <input type="checkbox" :checked="todo.isComplete" class="cb-input" />
+                <input @click="changeStatus" type="checkbox" :checked="todo.isComplete" class="cb-input" />
                 <span class="check"></span>
             </div>
             <p class="item">{{todo.title}}</p>
-            <button class="clear">
+            <button @click="deleteTodo" class="clear">
                 <img src="../assets/images/icon-cross.svg" alt="Clear it" />
             </button>
         </li>
@@ -22,7 +22,20 @@
 export default {
 props:{
     todo:Object
-}
+},
+methods: {
+    deleteTodo(){
+        if(confirm("واقعا؟!"))
+        {this.$emit("Delete",this.todo.id);}
+
+    },
+    changeStatus()
+    {
+
+        this.$emit("changeStatus",this.todo.id,!this.todo.isComplete);
+    }
+    
+},
 }
 </script>
 
