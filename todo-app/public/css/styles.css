@@ -20,6 +20,9 @@
   --clr-box-shadow: hsl(0, 0%, 0%, 0.1);
 }
 
+button{
+  cursor: pointer;
+}
 /* CHANGE CUSTOM PROPERTIES WHEN LIGHT THEME */
 
 body.light {
